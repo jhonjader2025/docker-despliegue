@@ -17,11 +17,10 @@
 #Para ejecutar el script dentro de docker, se puede usar ENTRYPOINT o CMD,pero no ambos, si se usan ambos,CMD se ejecutara despues de ENTRYPOINT, si se usan ambos, CMD se ejecutara como argumento de ENTRYPOINT
 
 
+# Usar la imagen oficial de Nginx
 FROM nginx:alpine
 
-COPY index.html /urs/share/nginx/html/index.html
-copy style.css /usr/share/nginx/html/style.css
-COPY register.html /usr/share/nginx/html/register.html
+# Copiar todos los archivos de la carpeta html al directorio de Nginx
+COPY ./html /usr/share/nginx/html
 
-COPY ../ /usr/share/nginx/html/
 #para no hacerlo archvo por archivo
