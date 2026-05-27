@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Supabase</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <main class="container">
+        <h2>Crear Cuenta</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Usuario Nuevo</label>
+                <input type="text" id="reg_usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="reg_password" required>
+            </div>
+            <button type="submit" class="btn-login" >Guardar en BD</button>
+        </form>
+        <p id="mensaje"></p>
+        <a href="index.html">Volver al Login</a>
+    </main>
+
+    <script>
+        const { createClient } = supabase;
+        const _supabase = createClient('https://enqmvtofrhrcjexsgnyn.supabase.co', 'sb_publishable_eSrtXfvE9kBOTQRtJTUOaw_1KqY6Ap7');
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = document.getElementById('reg_usuario').value;
+            const pass = document.getElementById('reg_password').value;
+
+            const { error } = await _supabase
+                .from('usuarios')
+                .insert([{ usuario: user, password: pass }]);
+
+            const msj = document.getElementById('mensaje');
+            if (error) {
+                msj.style.color = "red";
+                msj.textContent = "Error: " + error.message;
+            } else {
+                msj.style.color = "green";
+                msj.textContent = "¡Usuario guardado en la nube! Ya puedes iniciar sesión.";
+            }
+        });
+    </script>
+</body>
+
+</html>

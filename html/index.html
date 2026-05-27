@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Supabase</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <main class="container">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" id="usuario" required>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+        <p id="mensaje"></p>
+        <p>¿No tienes cuenta? <a href="register.html">Regístrate aquí</a></p>
+    </main>
+
+    <script>
+        const { createClient } = supabase;
+        const _supabase = createClient('https://enqmvtofrhrcjexsgnyn.supabase.co', 'sb_publishable_eSrtXfvE9kBOTQRtJTUOaw_1KqY6Ap7');
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = document.getElementById('usuario').value;
+            const pass = document.getElementById('password').value;
+
+            const { data, error } = await _supabase
+                .from('usuarios')
+                .select('*')
+                .eq('usuario', user)
+                .eq('password', pass)
+                .single();
+
+            if (data) {
+                alert("¡Bienvenido " + data.usuario + "!");
+            } else {
+                const msj = document.getElementById('mensaje');
+                msj.style.color = "red";
+                msj.textContent = "Error: Usuario no encontrado o clave incorrecta.";
+            }
+        });
+    </script>
+</body>
+
+</html>
